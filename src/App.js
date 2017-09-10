@@ -14,11 +14,12 @@ class App extends Component {
     this.state = {
       foo: 'bar',
       configuration: {
-        historia: -1
+        historia: 2
       },
-      searchField: '',
-      resultFields: {
-        nazwaFirmy: '',
+      searchNumber: '',
+      searchResult: {
+        sukces: true,         
+        nazwa: '',
         ulica: '',
         numer: '',
         kod: '',
@@ -48,11 +49,52 @@ class App extends Component {
       this.getCofiguration();
   }
 
+  setSearchResult(companyInfo) {  
+    if(companyInfo !== null) {
+      this.setState({
+          searchResult: {
+              sukces: true,
+              nazwa: companyInfo.Name,
+              ulica: companyInfo.Street,
+              numer: companyInfo.HouseNumber,
+              kod: companyInfo.PostalCode,
+              miasto: companyInfo.Place
+          }
+        }); 
+    } else {
+      this.setState({
+          searchResult: {
+              sukces: false,
+              nazwa: '',
+              ulica: '',
+              numer: '',
+              kod: '',
+              miasto: ''
+          }
+        }); 
+      }
+  }       
+          
+  handleNewSearch(search_number) {
+    this.setState({searchNumber: search_number});
+    let that = this;
+    axios.get('http://ihaveanidea.aveneo.pl/NIPAPI/api/Company?CompanyId=' + search_number)
+      .then(function(response) {
+        console.log(response.data);
+        let companyInfo = response.data.CompanyInformation;
+        that.setSearchResult(companyInfo);  //axios "psuje" this?
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   render() {
-    
     if(this.state.configuration.historia !== -1) {
       console.log("Historia dni: ", this.state.configuration.historia);
     }
+
+    
 
     return (
       <div className="App">
@@ -60,13 +102,13 @@ class App extends Component {
         <Header />
         <div className="container">
           
-          <Search  props="s" />
+          <Search newSearch={this.handleNewSearch.bind(this)} />
           
           <h3>Wynik szukania</h3>
           <div className="row">
             <div className="col-sm-6">
 
-              <Result />
+              <Result searchResult={this.state.searchResult} />
 
             </div>
             <div className="col-sm-6">
