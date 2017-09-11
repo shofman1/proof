@@ -1,15 +1,15 @@
 .App {
   width: 100%;
 }
-
-
+/*
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+animation: App-logo-spin infinite 0.5s linear;
+*/
 .App-logo {
   align-self: flex-start;
-  animation: App-logo-spin infinite 0.5s linear;
   padding: 25px;
 }
 .App-header {
@@ -21,7 +21,6 @@
 }
 
 form span.input-group-addon {
-  
     min-width: 70px;
 }
 form span.input-group-addon.smaller {

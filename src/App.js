@@ -87,6 +87,7 @@ class App extends Component {
     this.shortenHistoryToConfigDays();
     //tu zapisz historię do LOCALSTORAGE
     //this.saveHistoryToLocalStorage();
+    this.forceUpdate(); //zamienić na poprawny update state
   }
 
   setSearchResult(companyInfo) {  
@@ -154,7 +155,7 @@ class App extends Component {
             </div>
             <div className="col-sm-6">
               <h3>Historia wyszukiwań</h3>
-              <History searchNum={this.state.searchNumber} historyArray={this.state.history} />
+              <History searchNum={this.state.searchNumber} searchHistory={this.state.searchHistory} />
             </div>
           </div>
         </div>
