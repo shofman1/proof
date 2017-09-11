@@ -41,7 +41,7 @@ class Result extends Component {
                     <div className="form-group">
                         <div className="col-sm-6">
                             <div className="input-group">
-                                <span className="input-group-addon smaller">Kod</span>
+                                <span className="input-group-addon  ">Kod</span>
                                 <input type="text" value={searchResult.kod} className="form-control" placeholder="" />
                             </div>
                         </div>

@@ -12,7 +12,6 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      foo: 'bar',
       configuration: {
         historia: 2
       },
@@ -23,8 +22,10 @@ class App extends Component {
         ulica: '',
         numer: '',
         kod: '',
-        miasto: ''
-      }
+        miasto: '',
+        regon: ''
+      },
+      searchHistory: []
     }
   }
 
@@ -48,19 +49,62 @@ class App extends Component {
   componentDidMount() {
       this.getCofiguration();
   }
+  
+  shortenHistoryToConfigDays() {
+    let elemsToRemove = this.state.searchHistory.length - this.state.configuration.historia;
+    let x = 1;
+    while(x <= elemsToRemove) {
+      this.state.searchHistory.pop();  
+      x++;
+    }
+  }
+
+  saveHistoryToLocalStorage() {
+
+  }
+
+  //zapisz trafne wyszukiwanie do historii
+  saveToHistory(objCompany) {
+    console.log("Zapisuje do historii firme: " + objCompany.searchResult.nazwa);
+    let timestamp = new Date().toDateString();
+    //przejrzyj w pętli historię, jeśli jest juz bieżąca data, to ushiftnij element, jesli nie ma, dostaw nowy obiekt
+    let arrHistory = this.state.searchHistory;
+    if(arrHistory.length === 0) {
+      arrHistory.push({timestamp: timestamp, searches: [objCompany.searchResult]});
+    } else {
+      let jestTenDzien = false;
+      for (const objDay of arrHistory) { //szukaj daty
+        if(objDay.timestamp === timestamp){
+          objDay.searches.unshift(objCompany.searchResult);
+          jestTenDzien = true;
+          break;
+        }
+      }
+      if(jestTenDzien===false) { //dostaw nowy obiekt dnia
+        arrHistory.unshift({timestamp: timestamp, searches: [objCompany.searchResult]});
+      }
+    }
+    this.shortenHistoryToConfigDays();
+    //tu zapisz historię do LOCALSTORAGE
+    //this.saveHistoryToLocalStorage();
+  }
 
   setSearchResult(companyInfo) {  
     if(companyInfo !== null) {
-      this.setState({
+      let objCompany = {
           searchResult: {
               sukces: true,
               nazwa: companyInfo.Name,
               ulica: companyInfo.Street,
               numer: companyInfo.HouseNumber,
               kod: companyInfo.PostalCode,
-              miasto: companyInfo.Place
-          }
-        }); 
+              miasto: companyInfo.Place,
+              regon: companyInfo.Regon
+            }
+            
+      }
+      this.setState(objCompany); 
+      this.saveToHistory(objCompany);//zapisuj do historii tylko sensowne rezultaty, które dały wynik
     } else {
       this.setState({
           searchResult: {
@@ -69,7 +113,8 @@ class App extends Component {
               ulica: '',
               numer: '',
               kod: '',
-              miasto: ''
+              miasto: '',
+              regon: ''
           }
         }); 
       }
@@ -101,20 +146,15 @@ class App extends Component {
         
         <Header />
         <div className="container">
-          
           <Search newSearch={this.handleNewSearch.bind(this)} />
-          
-          <h3>Wynik szukania</h3>
           <div className="row">
             <div className="col-sm-6">
-
+              <h3>Wynik szukania</h3>
               <Result searchResult={this.state.searchResult} />
-
             </div>
             <div className="col-sm-6">
-
-              <History data={this.state} />
-
+              <h3>Historia wyszukiwań</h3>
+              <History searchNum={this.state.searchNumber} historyArray={this.state.history} />
             </div>
           </div>
         </div>
