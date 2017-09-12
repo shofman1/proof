@@ -28,10 +28,6 @@ class History extends Component {
             </div>
         });
         
-        
-
-
-
         return (
             <section className="row">
                 <div className="panel-group" id="historyAccordion">

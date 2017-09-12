@@ -20,6 +20,12 @@ animation: App-logo-spin infinite 0.5s linear;
   width: 100%;
 }
 
+@media screen and (max-width: 768px) {
+  .form_ulica, .form_kod {
+    margin-bottom: 15px;
+  }
+}
+
 form span.input-group-addon {
     min-width: 70px;
 }

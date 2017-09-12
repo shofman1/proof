@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import {Grid, Row, Col} from 'react-bootstrap';
 import './App.css';
 
 import Header from './components/header';
@@ -140,30 +140,26 @@ class App extends Component {
     if(this.state.configuration.historia !== -1) {
       console.log("Historia dni: ", this.state.configuration.historia);
     }
-
-    
-
     return (
-      <div className="App">
-        
+      <div className="App"> 
         <Header />
-        <div className="container">
+        <Grid>
           <Search newSearch={this.handleNewSearch.bind(this)} />
-          <div className="row">
-            <div className="col-sm-6">
+          <Row>
+            <Col sm={6}>
               <h3>Wynik szukania</h3>
               <Result searchResult={this.state.searchResult} />
-            </div>
-            <div className="col-sm-6">
+            </Col>
+            <Col sm={6}>
               <h3>Historia wyszukiwań</h3>
               <History searchNum={this.state.searchNumber} searchHistory={this.state.searchHistory} />
-            </div>
-          </div>
-        </div>
-
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
+
 }
 
 export default App;

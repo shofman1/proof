@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Row, Col, FormGroup, InputGroup, FormControl, Button} from 'react-bootstrap';
 import '../App.css';
 
 class Search extends Component {
@@ -9,37 +10,39 @@ class Search extends Component {
     handleChange(event) {
         this.setState({searchValue: event.target.value});
     }
-
     onFormSubmit(event) {
-        
         let num = this.state.searchValue;
         this.props.newSearch(num);
         event.preventDefault();
     }
+    render() {
+        //let x = <span className="glyphicon glyphicon-remove form-control-feedback"></span>  
+        // has-error wstaw do form-group has-feedback
+        return (
+            <Row className="searchblock">
+                <Col sm={12} md={8} lg={8}>
+                <form onSubmit={this.onFormSubmit.bind(this)}>
+                    <FormGroup>
+                    <Row>
+                        
+                        <Col lg={8} md={8} sm={8}>
+                        <InputGroup>
+                        <InputGroup.Addon>Szukaj wg</InputGroup.Addon>
+                        <FormControl type="text" value={this.state.searchValue} placeholder="nip, regon, krs" onChange={this.handleChange.bind(this)} name="search" id="search" />
+                        </InputGroup>
+                        </Col>
 
-  render() {
-    //let x = <span className="glyphicon glyphicon-remove form-control-feedback"></span>  
-    // has-error wstaw do form-group has-feedback
-    return (
-        <section className="row searchblock">
-            <div className="col-sm-12 col-md-8 col-lg-8">
-            <form className="form-horizontal" onSubmit={this.onFormSubmit.bind(this)}>
-                <div className="form-group has-feedback has-error">
-                    <div className="col-sm-8">
-                        <div className="input-group">
-                            <span className="input-group-addon">Szukaj firmy</span>
-                            <input type="text"  value={this.state.searchValue} onChange={this.handleChange.bind(this)} className="form-control" placeholder="np. PL7651467841" name="search" id="search" />
-                             <div className="input-group-btn">
-                                <button type="submit" className="btn btn-primary"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            </div>
-        </section>
-    );
-  }
+                        <Col lg={4} md={4} sm={4}>
+                        <Button bsStyle="primary" type="submit">Szukaj</Button>
+                        </Col>   
+                        
+                    </Row>
+                    </FormGroup>
+                </form>
+                </Col>
+            </Row>
+        );
+    }
 }
 
 export default Search;
