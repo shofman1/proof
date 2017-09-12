@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
 
 class History extends Component {
     render() {
@@ -8,7 +7,13 @@ class History extends Component {
             console.log("Jest jakas Historia Wyszukiwań");
         }
 
-        let historyDay = this.props.searchHistory.map( function(day){
+        let historyDay = this.props.searchHistory.map( function(day) {
+            
+            let searchItems = day.searches.map( function(oneSearch, index) {
+                console.log(oneSearch);
+                return <li key={index} className="list-group-item">{oneSearch.nazwa +", " + oneSearch.ulica + " " + oneSearch.numer + ", " + oneSearch.kod + " " + oneSearch.miasto}<span className="badge">{oneSearch.regon}</span></li>
+            })
+
             return <div className="panel panel-default" key={day.timestamp}>
                     <div className="panel-heading">
                         <h4 className="panel-title">
@@ -17,7 +22,7 @@ class History extends Component {
                     </div>
                     <div id="collapse1" className="panel-collapse collapse in">
                         <ul className="list-group">
-                            <li className="list-group-item">aaa<span className="badge">PL576-222-33-33</span></li>
+                            {searchItems}
                         </ul>
                     </div>
             </div>

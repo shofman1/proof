@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+
+import './App.css';
+
 import Header from './components/header';
 import Search from './components/search';
 import Result from './components/result';
 import History from './components/history';
 
-//import $ from 'jquery';
-import axios from 'axios';
-import './App.css';
 
 class App extends Component {
   constructor(props){
