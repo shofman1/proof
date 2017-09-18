@@ -49,6 +49,12 @@ class App extends Component {
 
   componentDidMount() {
       this.getCofiguration();
+      //sprawdzam, czy historia jest w cache przegladarki
+      let localSavedHistory =  JSON.parse(localStorage.getItem("proof_app_search_history"));
+      //console.log(localSavedHistory);
+      if(localSavedHistory) {
+        this.setState({searchHistory:localSavedHistory});
+      }
   }
   
   shortenHistoryToConfigDays() {
@@ -61,7 +67,8 @@ class App extends Component {
   }
 
   saveHistoryToLocalStorage() {
-
+    //console.log("ZAPIS DO LOCALSTORAGE");
+    localStorage.setItem("proof_app_search_history", JSON.stringify(this.state.searchHistory));
   }
 
   //zapisz trafne wyszukiwanie do historii
@@ -87,7 +94,7 @@ class App extends Component {
     }
     this.shortenHistoryToConfigDays();
     //tu zapisz historię do LOCALSTORAGE
-    //this.saveHistoryToLocalStorage();
+    this.saveHistoryToLocalStorage();
     this.forceUpdate(); //zamienić na poprawny update state
   }
 
@@ -96,6 +103,7 @@ class App extends Component {
       let objCompany = {
           searchResult: {
               sukces: true,
+              tresc: this.state.searchNumber,
               nazwa: companyInfo.Name,
               ulica: companyInfo.Street,
               numer: companyInfo.HouseNumber,
@@ -111,6 +119,7 @@ class App extends Component {
       this.setState({
           searchResult: {
               sukces: false,
+              tresc: '',
               nazwa: '',
               ulica: '',
               numer: '',
@@ -123,7 +132,7 @@ class App extends Component {
   }       
           
   handleNewSearch(search_number) {
-    this.setState({searchNumber: search_number});
+    this.setState({searchNumber: search_number});    
     let that = this;
     axios.get('http://ihaveanidea.aveneo.pl/NIPAPI/api/Company?CompanyId=' + search_number)
       .then(function(response) {
@@ -151,7 +160,7 @@ class App extends Component {
               <Result searchResult={this.state.searchResult} />
             </Col>
             <Col sm={6}>
-              <h3>Historia wyszukiwań</h3>
+              <h3>Historia szukania</h3>
               <History searchNum={this.state.searchNumber} searchHistory={this.state.searchHistory} />
             </Col>
           </Row>

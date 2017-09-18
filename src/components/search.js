@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {Row, Col, FormGroup, InputGroup, FormControl, Button} from 'react-bootstrap';
+import Validation from '../libraries/validation';
+
 import '../App.css';
 
 class Search extends Component {
@@ -8,11 +10,17 @@ class Search extends Component {
         this.state = {searchValue: ''};
     }
     handleChange(event) {
-        this.setState({searchValue: event.target.value});
+        this.setState({searchValue: event.target.value.trim() });
     }
     onFormSubmit(event) {
+        //zwaliduj numer nip itp.
+        let a = new Validation();
         let num = this.state.searchValue;
-        this.props.newSearch(num);
+        if(a.isNIPValid(num)) {
+            this.props.newSearch(num);
+        } else {
+            alert("NIP nieprawidłowy");
+        }      
         event.preventDefault();
     }
     render() {
