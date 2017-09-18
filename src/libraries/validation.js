@@ -4,7 +4,7 @@ class Validation {
         if (nip.substring(0, 2) === "PL") {
             nip = nip.substring(2);
         }
-        nip = nip.replace(/\-/g, '');// było \-
+        nip = nip.replace(/-/g, '');// było \-
         if (nip.length !== 10) return false;
         for (let i = 0; i < 10; i++) {
             if (isNaN(nip[i])) return false;

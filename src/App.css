@@ -1,13 +1,18 @@
 .App {
   width: 100%;
 }
-/*
-@keyframes App-logo-spin {
+
+@keyframes spinner-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-animation: App-logo-spin infinite 0.5s linear;
-*/
+.Spinner {
+   animation: spinner-spin infinite 2s linear;
+   height: 20px;
+   width: 20px;
+   font-size: 15px;
+}
+
 .App-logo {
   align-self: flex-start;
   padding: 25px;

@@ -6,8 +6,8 @@ class Header extends Component {
     return (
 
         <section className="App-header">
-          <img src='' className="App-logo" alt="@" />
-          <h2>Wyszukiwarka NIP</h2>
+          <img src='' className="App-logo" alt="LOGO" />
+          <h2>Wyszukiwarka firm</h2>
         </section>
         
     );

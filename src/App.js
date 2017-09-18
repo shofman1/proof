@@ -5,6 +5,7 @@ import './App.css';
 
 import Header from './components/header';
 import Search from './components/search';
+import Spinner from './components/spinner';
 import Result from './components/result';
 import History from './components/history';
 
@@ -13,6 +14,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      spinner: false,
       configuration: {
         historia: 2
       },
@@ -95,7 +97,7 @@ class App extends Component {
     this.shortenHistoryToConfigDays();
     //tu zapisz historię do LOCALSTORAGE
     this.saveHistoryToLocalStorage();
-    this.forceUpdate(); //zamienić na poprawny update state
+    this.forceUpdate(); //nieladnie
   }
 
   setSearchResult(companyInfo) {  
@@ -132,10 +134,12 @@ class App extends Component {
   }       
           
   handleNewSearch(search_number) {
+    this.setState({spinner: true});
     this.setState({searchNumber: search_number});    
     let that = this;
     axios.get('http://ihaveanidea.aveneo.pl/NIPAPI/api/Company?CompanyId=' + search_number)
       .then(function(response) {
+        that.setState({spinner: false});
         console.log(response.data);
         let companyInfo = response.data.CompanyInformation;
         that.setSearchResult(companyInfo);  //axios "psuje" this?
@@ -154,6 +158,7 @@ class App extends Component {
         <Header />
         <Grid>
           <Search newSearch={this.handleNewSearch.bind(this)} />
+          <Spinner run={this.state.spinner} />
           <Row>
             <Col sm={6}>
               <h3>Wynik szukania</h3>
