@@ -14,15 +14,16 @@ class Search extends Component {
     }
     onFormSubmit(event) {
         //zwaliduj numer nip itp.
-        let a = new Validation();
+        let v = new Validation();
         let num = this.state.searchValue;
-        if(a.isNIPValid(num)) {
+        if(v.isNIPValid(num) || v.isREGONValid(num) || v.isKRSValid(num) ) {
             this.props.newSearch(num);
         } else {
-            alert("NIP nieprawidłowy");
-        }      
+            alert("Numer nieprawidłowy");
+        }   
         event.preventDefault();
     }
+
     render() {
         //let x = <span className="glyphicon glyphicon-remove form-control-feedback"></span>  
         // has-error wstaw do form-group has-feedback

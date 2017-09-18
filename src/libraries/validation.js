@@ -35,6 +35,13 @@ class Validation {
         }
         return true;
     }
+
+    isKRSValid(krs) {
+        if (krs == null) return false;
+        if(krs.length !== 13) return false;
+        if(krs.substring(0,3) !== "KRS") return false;
+        return true;
+    }
 }
 
 export default Validation;
