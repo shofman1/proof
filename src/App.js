@@ -9,7 +9,6 @@ import Spinner from './components/spinner';
 import Result from './components/result';
 import History from './components/history';
 
-
 class App extends Component {
   constructor(props){
     super(props);
@@ -135,14 +134,19 @@ class App extends Component {
           
   handleNewSearch(search_number) {
     this.setState({spinner: true});
-    this.setState({searchNumber: search_number});    
+    this.setState({searchNumber: search_number});
+
+//tu sprawdz w pętli, czy w historii jest juz search_number
+//jesli tak, to odczytaj element z historii, ustaw pola wyniku za pomoca jakiejs dodatkowej metody
+//zapisz znowu do historii nowy element this.saveToHistory(objCompany) - jak wyzej
+//wyłącz spinnera:  this.setState({spinner: false});
+
     let that = this;
     axios.get('http://ihaveanidea.aveneo.pl/NIPAPI/api/Company?CompanyId=' + search_number)
       .then(function(response) {
         that.setState({spinner: false});
-        console.log(response.data);
         let companyInfo = response.data.CompanyInformation;
-        that.setSearchResult(companyInfo);  //axios "psuje" this?
+        that.setSearchResult(companyInfo);  
       })
       .catch(function (error) {
         console.log(error);
