@@ -11,7 +11,7 @@ class History extends Component {
             let historyDay = this.props.searchHistory.map( function(day, index ) {
                 let searchItems = day.searches.map( function(oneSearch, idx) {
                     let daneAdresowe = oneSearch.nazwa +", " + oneSearch.ulica + " " + oneSearch.numer + ", " + oneSearch.kod + " " + oneSearch.miasto;
-                    return <ListGroupItem key={idx}><span>Treść zapytania:{oneSearch.tresc}<br/></span>{daneAdresowe}<Badge>REGON: {oneSearch.regon}</Badge></ListGroupItem>
+                    return <ListGroupItem key={idx}><span className='highlight'>Treść zapytania:{oneSearch.tresc}<br/></span>{daneAdresowe}<Badge>REGON: {oneSearch.regon}</Badge></ListGroupItem>
                 })
                 return <Panel key={index} header={'Wyszukiwania z dnia: ' + day.timestamp} >
                         <ListGroup>
