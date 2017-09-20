@@ -6,8 +6,7 @@ class Result extends Component {
       
   render() {
     let searchResult = this.props.searchResult;
-    console.log("W result.js");
-    console.log(searchResult);
+    //console.log(searchResult);
     let no_result=<Fade in={false}><h3> </h3></Fade>;
     if(!searchResult.sukces) {
         no_result = <Fade in={true}><h3>Brak wyników!</h3></Fade>

@@ -74,9 +74,9 @@ class App extends Component {
 
   //zapisz trafne wyszukiwanie do historii
   saveToHistory(objCompany) {
-    console.log("Zapisuje do historii firme: " + objCompany.searchResult.nazwa);
+    //console.log("Zapisuje do historii firme: " + objCompany.searchResult.nazwa);
     let timestamp = new Date().toDateString();
-    //przejrzyj w pętli historię, jeśli jest juz bieżąca data, to ushiftnij element, jesli nie ma, dostaw nowy obiekt
+    //przejrzyj w pętli historię, jeśli jest juz bieżąca data, to unshiftnij element, jesli nie ma, dostaw nowy obiekt
     let arrHistory = this.state.searchHistory;
     if(arrHistory.length === 0) {
       arrHistory.push({timestamp: timestamp, searches: [objCompany.searchResult]});
@@ -131,32 +131,70 @@ class App extends Component {
         }); 
       }
   }       
-          
+
+  // wyswietl historyczny search w polach input
+  // i zapisz ponownie do historii, bo jednak szukanie się odbyło
+  displayThisHistoryItemAndSave(search){
+    let objCompany = {searchResult: search};
+    //console.log(objCompany);
+    this.setState(objCompany); 
+    this.saveToHistory(objCompany);//
+  }
+
+  //zwroc true jesli byl w historii
+  checkHistoryItemsIfSearchExists(search_number) {
+    //tu sprawdz w pętli, czy w historii jest juz search_number
+    //jesli tak, to odczytaj element z historii, ustaw pola wyniku za pomoca displayThisHistoryItem
+    let arrHistory = this.state.searchHistory;
+    let numberFoundInHistory = false;
+    if(arrHistory.length === 0) {
+      console.log("Brak czegokolwiek w historii");
+      return false;
+    } else { //szukaj, bo historia istnieje
+      console.log("Przemiatam historię w poszukiwaniu numeru search_number");
+      for (const objDay of arrHistory) { //przejrzyj dni i w nich szukania
+         let arrOneDaySeaches = objDay.searches;
+         for (const objSearch of arrOneDaySeaches) {
+            if(objSearch.tresc === search_number) {
+              console.log("Tego numeru już szukano wcześniej");
+              numberFoundInHistory = true;
+              this.displayThisHistoryItemAndSave(objSearch);
+              break;
+            }
+         }
+         if(numberFoundInHistory) { //wyjdz z petli po pierwszym znalezisku
+           break;
+         }
+      }
+    }
+    if(numberFoundInHistory) return true;
+    return false;
+  }
+
   handleNewSearch(search_number) {
     this.setState({spinner: true});
     this.setState({searchNumber: search_number});
-
-//tu sprawdz w pętli, czy w historii jest juz search_number
-//jesli tak, to odczytaj element z historii, ustaw pola wyniku za pomoca jakiejs dodatkowej metody
-//zapisz znowu do historii nowy element this.saveToHistory(objCompany) - jak wyzej
-//wyłącz spinnera:  this.setState({spinner: false});
-
-    let that = this;
-    axios.get('http://ihaveanidea.aveneo.pl/NIPAPI/api/Company?CompanyId=' + search_number)
-      .then(function(response) {
-        that.setState({spinner: false});
-        let companyInfo = response.data.CompanyInformation;
-        that.setSearchResult(companyInfo);  
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    let numFound = this.checkHistoryItemsIfSearchExists(search_number);//sprawdza, wyswietla, zapisuje ponownie
+    if(numFound) {
+      this.setState({spinner: false});
+    } else {
+      let that = this;
+      axios.get('http://ihaveanidea.aveneo.pl/NIPAPI/api/Company?CompanyId=' + search_number)
+        .then(function(response) {
+          that.setState({spinner: false});
+          let companyInfo = response.data.CompanyInformation;
+          that.setSearchResult(companyInfo);  
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }
 
   render() {
-    if(this.state.configuration.historia !== -1) {
-      console.log("Historia dni: ", this.state.configuration.historia);
-    }
+    //if(this.state.configuration.historia !== -1) {
+    // console.log("Historia dni: ", this.state.configuration.historia);
+    //}
     return (
       <div className="App"> 
         <Header />
